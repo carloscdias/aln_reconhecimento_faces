@@ -27,7 +27,7 @@ function [dataset, labels] = read_dataset(dataset_path)
         img = imread(file_list(i));
         img_gray = rgb2gray(img);
         [r c] = size(img_gray);
-        dataset(:, $ + 1) = matrix(double(img_gray), r*c, 1);
+        dataset(:, $ + 1) = matrix(double(img_gray)/255, r*c, 1);
         [a b c d] = regexp(file_list(i), '/(\d+)-(\d+)\.(?:jpg|png)/');
         labels($ + 1) = d(1);
     end
@@ -85,8 +85,8 @@ function [score, cm, cm_labels, time] = cross_validation(dataset, labels, n)
     time = toc();
 endfunction
 
-[ds l] = read_dataset('recdev/very-easy');
-[score cm, cm_labels, time] = cross_validation(ds, l, 10);
+[ds l] = read_dataset('recdev/medium');
+[score, cm, cm_labels, time] = cross_validation(ds, l, 10);
 
 disp('score', score);
 disp('time', time);
