@@ -1,0 +1,3 @@
+[submodule "recdev"]
+	path = recdev
+	url = https://github.com/rfabbri/recdev.git
