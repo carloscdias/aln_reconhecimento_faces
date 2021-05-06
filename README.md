@@ -11,7 +11,7 @@ Código realizado no software Scilab pelos alunos Carlos Cardoso Dias e Maria Ed
 
 3. Escrever validação cruzada para o classificador simples:
   3.1 Separar as imagens em conjuntos de teste e treinamento;
-  3.2 Produir a pontuação de reconhecimento (score), tempo de execução e a matriz de confusão.
+  3.2 Produzir a pontuação de reconhecimento (score), tempo de execução e a matriz de confusão.
 
 4. Modificar a forma como se calcula a similaridade para incrementar a pontuação de reconhecimento.
 
@@ -23,7 +23,7 @@ Código realizado no software Scilab pelos alunos Carlos Cardoso Dias e Maria Ed
 
 2. Obter os resultados através da função **cross_validation**, passando como parâmetro as saídas da função **read_dataset**, o número de simulações desejadas, a função desejada para a construção do modelo, a função desejada para classificação e um parâmetro booleano que indica se a simulação deve ou não plottar as predições em que ocorreram falhas.
 
-##### Exemplo de execução
+#### Exemplo de execução
 
 Neste exemplo estamos usando a pasta hard e serão executadas 10 simulações utilizando o algoritmo de distância padrão,
 onde cada imagem de treinamento e comparada com a imagem alvo e retorna-se a que tenha a menor distância, para esse
