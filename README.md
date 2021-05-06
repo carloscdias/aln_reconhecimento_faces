@@ -19,14 +19,16 @@ Código realizado no software Scilab pelos alunos Carlos Cardoso Dias e Maria Ed
   
   Ao baixar o repositório, executa-se o arquivo **aln_reconhecimento_faces.sce**, mas se atente ao fato de:
 
-1. Ler os aqruivos através da função **read_dataset**, passando como parâmetro o caminho da pasta com as imagens e obtendo como saída a matriz de todas as imagens como coluna-vetores e o vetor com a categoria de cada coluna da matriz;
+1. Ler os arquivos através da função **read_dataset**, passando como parâmetro o caminho da pasta com as imagens e obtendo como saída a matriz de todas as imagens como coluna-vetores e o vetor com a categoria de cada coluna da matriz;
 
-2. Obter os resultados através da função **cross_validation**, passando como parâmetro as saídas da função **read_dataset** e o número de simulações desejadas.
+2. Obter os resultados através da função **cross_validation**, passando como parâmetro as saídas da função **read_dataset**, o número de simulações desejadas, a função desejada para a construção do modelo, a função desejada para classificação e um parâmetro booleano que indica se a simulação deve ou não plottar as predições em que ocorreram falhas.
 
 ##### Exemplo de execução
-# 
-Neste exemplo estamos usando a pasta hard e serão executadas 10 simulações.
 
-    [ds l] = read_dataset('/recdev/hard');
-    [score, cm, cm_labels, time] = cross_validation(ds, l, 10);
+Neste exemplo estamos usando a pasta hard e serão executadas 10 simulações utilizando o algoritmo de distância padrão,
+onde cada imagem de treinamento e comparada com a imagem alvo e retorna-se a que tenha a menor distância, para esse
+exemplo, a distância manhattan.
+
+    [ds l] = read_dataset('recdev/hard');
+    [score, cm, cm_labels, time] = cross_validation(ds, l, 10, simple_classifier_model, simple_classifier_manhattan, %f);
 
