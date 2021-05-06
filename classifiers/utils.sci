@@ -41,6 +41,10 @@ function [dataset, labels] = read_dataset(dataset_path)
     dataset = [];
     for i = 1:dataset_size
         img = int_imread(file_list(i));
+        img_size = size(img);
+        if img_size(3) == 4 then
+            img = img(:,:,1:3);
+        end
         dataset(:, $ + 1) = img2vec(img);
         [a b c d] = regexp(file_list(i), '/(\d+)-(\d+)\.(?:jpg|png)/');
         labels($ + 1) = d(1);
