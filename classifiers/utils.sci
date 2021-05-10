@@ -142,6 +142,68 @@ function [score, cm, cm_labels, time] = cross_validation(dataset, labels, n, fn_
     time = toc();
 endfunction
 
+function [A, mean_A] = train_model_pca(dataset, labels, c)
+    unique_labels = unique(labels);
+    unique_labels_size = size(unique_labels, 1);
+    A = [];
+    mean_A = [];
+    for i = 1:unique_labels_size
+        class_i = find(labels == unique_labels(i));
+        [data_db, mean_db] = sip_pca(dataset(:, class_i), c);
+        A(:, :, $ + 1) = data_db;
+        mean_A(:, $ + 1) = mean_db;
+    end
+endfunction
+
+function [predicted_class, projection] = classify_pca(x, A, mean_A, unique_labels)
+    unique_labels_size = size(unique_labels, 1);
+    min_distance = %inf;
+    for q = 1:unique_labels_size
+        [x_proj_pca, x_proj_orig] = sip_pca_project(x, A(:, :, q), mean_A(:, q));
+        distance = euclidean_distance(x_proj_orig, x);
+        if distance < min_distance then
+            min_distance = distance;
+            predicted_class = unique_labels(q);
+            projection = x_proj_orig;
+        end
+    end
+endfunction
+
+function [score, cm, cm_labels, time] = cross_validation_pca(dataset, labels, n, plot_errors, c)
+    tic();
+    cm_labels = unique(labels);
+    unique_labels_size = size(cm_labels, 1);
+    cm = zeros(unique_labels_size, unique_labels_size);
+    score = 1;
+    plots = 0;
+    for k = 1:n
+        [i_train i_test] = split_train_test_indexes(labels, 1);
+        // PCA
+        [A, mean_A] = train_model_pca(dataset(:, i_train), labels(i_train), c);
+        // END PCA
+        test_size = length(i_test);
+        err = 0;
+        for t = 1:test_size
+            // PROJEÇÃO
+            [predicted_class projection] = classify_pca(dataset(:, i_test(t)), A, mean_A, cm_labels);
+            // FIM PROJEÇÃO
+            i = find(cm_labels == labels(i_test(t)));
+            j = find(cm_labels == predicted_class);
+            cm(i, j) = cm(i, j) + 1;
+            if predicted_class <> labels(i_test(t)) then
+                err = err + 1;
+                if plot_errors then
+                    plot_predicted_real(plots, projection, dataset(:, i_test(t)));
+                    plots = plots + 1;
+                end
+            end
+        end
+        score = score - err/(n*test_size);
+    end
+    time = toc();
+endfunction
+
+
 /**
  * Manhattan Distance between two vectors
  *
